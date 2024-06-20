@@ -1,0 +1,81 @@
+[gd_scene load_steps=14 format=3 uid="uid://bbxvih7kkfic1"]
+
+[ext_resource type="Script" path="res://scripts/player_third_person.gd" id="1_gsyuh"]
+[ext_resource type="Script" path="res://scripts/controllers/camera_controller.gd" id="1_jpbg1"]
+[ext_resource type="Resource" uid="uid://cnlc3h6pjpaxl" path="res://scenes/movement_states/stand.tres" id="2_un1dq"]
+[ext_resource type="Resource" uid="uid://dnkqyyk017pxd" path="res://scenes/movement_states/walk.tres" id="3_7kiew"]
+[ext_resource type="Resource" uid="uid://cmb1htl0h5da7" path="res://scenes/movement_states/run.tres" id="4_e0da7"]
+[ext_resource type="Resource" uid="uid://tduott8o2vh1" path="res://scenes/movement_states/crouch.tres" id="5_yt4cc"]
+[ext_resource type="Script" path="res://scripts/controllers/MovementController.gd" id="6_rr11n"]
+[ext_resource type="PackedScene" uid="uid://carg2ygr3d8ff" path="res://scenes/held_items/item_pistol.tscn" id="7_ba3fg"]
+[ext_resource type="PackedScene" uid="uid://dtytkmyj34yj2" path="res://scenes/surface_painting/paint.tscn" id="9_2osi2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yiwkj"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_514uk"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_d5kfg"]
+radius = 0.05
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_dqrjx"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("MeshRoot:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[node name="PlayerThirdPerson" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 2
+script = ExtResource("1_gsyuh")
+movement_states = {
+"crouch": ExtResource("5_yt4cc"),
+"run": ExtResource("4_e0da7"),
+"stand": ExtResource("2_un1dq"),
+"walk": ExtResource("3_7kiew")
+}
+
+[node name="MovementController" type="Node" parent="." node_paths=PackedStringArray("player", "mesh_root")]
+script = ExtResource("6_rr11n")
+player = NodePath("..")
+mesh_root = NodePath("../MeshRoot")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_yiwkj")
+
+[node name="MeshRoot" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshRoot"]
+mesh = SubResource("CapsuleMesh_514uk")
+
+[node name="CamRoot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("1_jpbg1")
+
+[node name="CamYaw" type="Node3D" parent="CamRoot"]
+
+[node name="CamPitch" type="Node3D" parent="CamRoot/CamYaw"]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CamRoot/CamYaw/CamPitch"]
+shape = SubResource("SphereShape3D_d5kfg")
+spring_length = 0.0
+
+[node name="Camera3D" type="Camera3D" parent="CamRoot/CamYaw/CamPitch/SpringArm3D"]
+
+[node name="RayCast3D" type="RayCast3D" parent="CamRoot/CamYaw/CamPitch"]
+target_position = Vector3(0, 0, 10)
+collision_mask = 8
+collide_with_areas = true
+
+[node name="ItemPistol" parent="CamRoot/CamYaw/CamPitch" instance=ExtResource("7_ba3fg")]
+transform = Transform3D(0.995621, 0, 0.0934828, 0, 1, 0, -0.0934828, 0, 0.995621, 0.0591319, -0.10865, 0)
+projectile = ExtResource("9_2osi2")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_dqrjx")
+
+[connection signal="pressed_jump" from="." to="MovementController" method="_jump"]
+[connection signal="set_movement_direction" from="." to="MovementController" method="_on_set_movement_direction"]
+[connection signal="set_movement_state" from="." to="MovementController" method="_on_set_movement_state"]
+[connection signal="set_cam_rotation" from="CamRoot" to="MovementController" method="_on_set_cam_rotation"]

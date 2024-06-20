@@ -1,0 +1,85 @@
+[gd_scene load_steps=12 format=3 uid="uid://bmvhwxd0s5kt6"]
+
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_r1ftc"]
+[ext_resource type="PackedScene" uid="uid://b7m4wdks3uoej" path="res://scenes/held_items/item_none.tscn" id="2_vpino"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_l8300"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_a4e8l"]
+
+[sub_resource type="Animation" id="Animation_fgfwc"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_alums"]
+resource_name = "idle"
+length = 3.0
+loop_mode = 1
+
+[sub_resource type="Animation" id="Animation_neu5v"]
+resource_name = "move"
+loop_mode = 1
+step = 0.25
+
+[sub_resource type="Animation" id="Animation_gxrp3"]
+resource_name = "shoot"
+length = 0.4
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bij3v"]
+_data = {
+"RESET": SubResource("Animation_fgfwc"),
+"idle": SubResource("Animation_alums"),
+"move": SubResource("Animation_neu5v"),
+"primary": SubResource("Animation_gxrp3")
+}
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_6vog8"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Camera3D:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5kryc"]
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+script = ExtResource("1_r1ftc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_l8300")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_a4e8l")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.50266, 0)
+
+[node name="ItemNone" parent="Camera3D" instance=ExtResource("2_vpino")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_bij3v")
+}
+playback_default_blend_time = 0.05
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_6vog8")
+
+[node name="CollisionNodes" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="ItemArea3D" type="Area3D" parent="CollisionNodes"]
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionNodes/ItemArea3D"]
+shape = SubResource("CapsuleShape3D_5kryc")
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="area_entered" from="CollisionNodes/ItemArea3D" to="." method="_on_item_area_3d_area_entered"]

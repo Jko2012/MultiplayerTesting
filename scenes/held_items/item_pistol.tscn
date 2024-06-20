@@ -1,0 +1,133 @@
+[gd_scene load_steps=8 format=3 uid="uid://carg2ygr3d8ff"]
+
+[ext_resource type="Script" path="res://scripts/held_items/item_pistol.gd" id="1_jy0wg"]
+[ext_resource type="PackedScene" uid="uid://dyqv442i1yawl" path="res://assets/models/Pistol.blend" id="1_ko4p3"]
+
+[sub_resource type="Animation" id="Animation_r3tqr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pistol:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.5, -0.25, -0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pistol:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_o4lk7"]
+resource_name = "idle"
+length = 3.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pistol:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(0.5, -0.25, -0.5), Vector3(0.5, -0.288685, -0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pistol:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.169087, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_hmuem"]
+resource_name = "move"
+loop_mode = 1
+step = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pistol:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 2),
+"update": 0,
+"values": [Vector3(0.5, -0.25, -0.5), Vector3(0.428649, -0.204682, -0.5), Vector3(0.5, -0.25, -0.5), Vector3(0.598728, -0.187461, -0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_111mw"]
+resource_name = "shoot"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pistol:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0.5, -0.18548, -0.5), Vector3(0.5, -0.25, -0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pistol:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0.277211, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j80bh"]
+_data = {
+"RESET": SubResource("Animation_r3tqr"),
+"idle": SubResource("Animation_o4lk7"),
+"move": SubResource("Animation_hmuem"),
+"primary": SubResource("Animation_111mw")
+}
+
+[node name="ItemPistol" type="Node3D"]
+script = ExtResource("1_jy0wg")
+
+[node name="Pistol" parent="." instance=ExtResource("1_ko4p3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.25, -0.5)
+
+[node name="ProjectileSpawn" type="Marker3D" parent="Pistol"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0540883, -0.29502)
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -50)
+collision_mask = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_j80bh")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

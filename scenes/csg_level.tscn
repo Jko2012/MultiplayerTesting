@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://idkmuqdei7x"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+size = Vector3(50, 5, 50)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+operation = 2
+size = Vector3(49, 4, 49)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(0.849838, 0, 0.527045, 0, 1, 0, -0.527045, 0, 0.849838, -5.278, -0.5, -13.872)
+size = Vector3(4, 1, 1)
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="CSGBox3D"]
+transform = Transform3D(0.716958, 0.335607, 0.611015, -0.595737, 0.750152, 0.287001, -0.362035, -0.569772, 0.737761, -11.6057, 0.500492, 13.2211)
+inner_radius = 3.0
+outer_radius = 5.0
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.689, 0.5, 0)
+size = Vector3(20, 3, 10)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="CSGBox3D/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+operation = 2
+size = Vector3(19, 2.5, 10)
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="CSGBox3D/CSGBox3D"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 3.652, -1.5, 5)
+polygon = PackedVector2Array(0, 0, 0, 3, 4, 0)
+depth = 2.0

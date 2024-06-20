@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://dtytkmyj34yj2"]
+
+[ext_resource type="Script" path="res://scripts/surface_painting/paint.gd" id="1_0wpck"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_xykpj"]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rt2t0"]
+albedo_color = Color(0.341176, 0.196078, 0.145098, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_58s51"]
+radius = 0.1
+
+[node name="Paint" type="CharacterBody3D"]
+collision_layer = 16
+script = ExtResource("1_0wpck")
+color = Color(0.331283, 0.174168, 0.027444, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_xykpj")
+surface_material_override/0 = SubResource("StandardMaterial3D_rt2t0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_58s51")

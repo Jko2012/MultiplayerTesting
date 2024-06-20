@@ -1,0 +1,55 @@
+[gd_scene load_steps=12 format=3 uid="uid://b1742tyrlyt5s"]
+
+[ext_resource type="Shader" uid="uid://bafvf1eaplikv" path="res://scripts/shaders/paint_shader.tres" id="2_ynted"]
+[ext_resource type="Texture2D" uid="uid://xaa2grdypvbn" path="res://addons/kenney_prototype_textures/green/texture_02.png" id="3_k3017"]
+[ext_resource type="Script" path="res://scripts/surface_painting/SetUVPositionMesh.gd" id="4_mqpcm"]
+[ext_resource type="Script" path="res://scripts/surface_painting/Brush.gd" id="5_1qe5k"]
+[ext_resource type="Script" path="res://scripts/surface_painting/DrawViewport.gd" id="5_sfb1c"]
+[ext_resource type="PackedScene" uid="uid://bgq3twv2jc8gl" path="res://scenes/floating_items/floating_item_pistol.tscn" id="7_7i35k"]
+[ext_resource type="Texture2D" uid="uid://mddi1hal5708" path="res://assets/pictures/brush_texture_lighter.png" id="7_t6ka7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ia83d"]
+size = Vector3(100, 1, 100)
+
+[sub_resource type="BoxMesh" id="BoxMesh_32xu2"]
+size = Vector3(100, 1, 100)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_0oiu6"]
+viewport_path = NodePath("DrawViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yu0cp"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_ynted")
+shader_parameter/triplanar_scale = Vector3(0.1, 0.1, 0.1)
+shader_parameter/triplanar_offset = null
+shader_parameter/triplanar_sharpness = 0.5
+shader_parameter/MainTexture = ExtResource("3_k3017")
+shader_parameter/PaintTexture = SubResource("ViewportTexture_0oiu6")
+
+[node name="Environment" type="Node3D"]
+
+[node name="FloatingItemPistol" parent="." instance=ExtResource("7_7i35k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.98323, 0.0388577, 23.2507)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_ia83d")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_32xu2")
+surface_material_override/0 = SubResource("ShaderMaterial_yu0cp")
+script = ExtResource("4_mqpcm")
+
+[node name="DrawViewport" type="SubViewport" parent="."]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(10240, 10240)
+render_target_clear_mode = 1
+render_target_update_mode = 4
+script = ExtResource("5_sfb1c")
+
+[node name="Brush" type="Node2D" parent="DrawViewport"]
+script = ExtResource("5_1qe5k")
+texture = ExtResource("7_t6ka7")

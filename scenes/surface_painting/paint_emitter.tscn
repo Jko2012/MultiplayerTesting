@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://gbx67bbawj6i"]
+
+[ext_resource type="Script" path="res://scripts/surface_painting/paint_emitter.gd" id="1_okvij"]
+[ext_resource type="PackedScene" uid="uid://dtytkmyj34yj2" path="res://scenes/surface_painting/paint.tscn" id="2_r14kw"]
+
+[node name="PaintEmitter" type="Node3D"]
+script = ExtResource("1_okvij")
+paint_scene = ExtResource("2_r14kw")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.05
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
