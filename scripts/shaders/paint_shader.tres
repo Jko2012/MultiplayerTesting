@@ -1,6 +1,4 @@
-[gd_resource type="VisualShader" load_steps=21 format=3 uid="uid://bafvf1eaplikv"]
-
-[ext_resource type="Texture2D" uid="uid://mddi1hal5708" path="res://assets/pictures/brush_texture_lighter.png" id="1_rbcsv"]
+[gd_resource type="VisualShader" load_steps=19 format=3 uid="uid://bafvf1eaplikv"]
 
 [sub_resource type="VisualShaderNodeColorFunc" id="VisualShaderNodeColorFunc_np4ko"]
 
@@ -23,14 +21,12 @@ operator = 2
 [sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_nl3ci"]
 parameter_name = "PaintTexture"
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_528e4"]
-expanded_output_ports = [0]
-texture = ExtResource("1_rbcsv")
-
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_6ou0p"]
 frequency = 0.035
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rkdbb"]
+width = 1024
+height = 1024
 noise = SubResource("FastNoiseLite_6ou0p")
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_u3xyi"]
@@ -60,6 +56,7 @@ source = 5
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_c72sm"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
+expanded_output_ports = [0]
 op_type = 3
 
 [sub_resource type="VisualShaderNodeTextureParameterTriplanar" id="VisualShaderNodeTextureParameterTriplanar_qtarr"]
@@ -144,6 +141,7 @@ void fragment() {
 // Output:0
 	ALBEDO = n_out7p0;
 	ROUGHNESS = n_out13p0.x;
+	SPECULAR = n_out13p0.x;
 
 
 }
@@ -154,29 +152,27 @@ nodes/fragment/2/position = Vector2(-1240, 200)
 nodes/fragment/6/node = SubResource("VisualShaderNodeTexture_o8ted")
 nodes/fragment/6/position = Vector2(-360, 320)
 nodes/fragment/7/node = SubResource("VisualShaderNodeMix_c72sm")
-nodes/fragment/7/position = Vector2(280, 120)
+nodes/fragment/7/position = Vector2(300, 100)
 nodes/fragment/8/node = SubResource("VisualShaderNodeTextureParameterTriplanar_qtarr")
-nodes/fragment/8/position = Vector2(-760, -120)
+nodes/fragment/8/position = Vector2(-1220, -140)
 nodes/fragment/10/node = SubResource("VisualShaderNodeColorFunc_np4ko")
-nodes/fragment/10/position = Vector2(-100, 580)
+nodes/fragment/10/position = Vector2(-100, 540)
 nodes/fragment/11/node = SubResource("VisualShaderNodeTexture_ll4q1")
 nodes/fragment/11/position = Vector2(-500, 680)
 nodes/fragment/12/node = SubResource("VisualShaderNodeVectorOp_217xd")
-nodes/fragment/12/position = Vector2(140, 720)
+nodes/fragment/12/position = Vector2(120, 520)
 nodes/fragment/13/node = SubResource("VisualShaderNodeVectorOp_3citt")
-nodes/fragment/13/position = Vector2(460, 620)
+nodes/fragment/13/position = Vector2(420, 420)
 nodes/fragment/16/node = SubResource("VisualShaderNodeTexture2DParameter_nl3ci")
-nodes/fragment/16/position = Vector2(-780, 300)
-nodes/fragment/17/node = SubResource("VisualShaderNodeTexture_528e4")
-nodes/fragment/17/position = Vector2(-500, 940)
+nodes/fragment/16/position = Vector2(-1220, 300)
 nodes/fragment/18/node = SubResource("VisualShaderNodeTexture_u3xyi")
-nodes/fragment/18/position = Vector2(-500, 1280)
+nodes/fragment/18/position = Vector2(-520, 980)
 nodes/fragment/19/node = SubResource("VisualShaderNodeVectorOp_0gv4x")
-nodes/fragment/19/position = Vector2(-200, 1180)
+nodes/fragment/19/position = Vector2(-120, 1180)
 nodes/fragment/20/node = SubResource("VisualShaderNodeVectorOp_l0pfr")
 nodes/fragment/20/position = Vector2(120, 1180)
 nodes/fragment/21/node = SubResource("VisualShaderNodeVectorFunc_rhw6l")
-nodes/fragment/21/position = Vector2(-40, 860)
+nodes/fragment/21/position = Vector2(100, 860)
 nodes/fragment/22/node = SubResource("VisualShaderNodeStep_82j5y")
-nodes/fragment/22/position = Vector2(420, 1020)
-nodes/fragment/connections = PackedInt32Array(2, 0, 6, 0, 7, 0, 0, 0, 10, 0, 12, 0, 11, 0, 12, 1, 6, 0, 10, 0, 6, 4, 7, 2, 16, 0, 6, 2, 6, 0, 7, 1, 8, 0, 7, 0, 2, 0, 17, 0, 2, 0, 18, 0, 18, 0, 19, 1, 17, 4, 19, 0, 19, 0, 20, 1, 17, 4, 20, 0, 17, 4, 21, 0, 20, 0, 22, 1, 21, 0, 22, 0, 13, 0, 0, 3, 12, 0, 13, 1, 6, 4, 13, 0)
+nodes/fragment/22/position = Vector2(380, 1020)
+nodes/fragment/connections = PackedInt32Array(2, 0, 6, 0, 7, 0, 0, 0, 10, 0, 12, 0, 11, 0, 12, 1, 6, 0, 10, 0, 16, 0, 6, 2, 6, 0, 7, 1, 8, 0, 7, 0, 18, 0, 19, 1, 19, 0, 20, 1, 20, 0, 22, 1, 21, 0, 22, 0, 12, 0, 13, 1, 6, 4, 13, 0, 6, 4, 21, 0, 6, 4, 19, 0, 6, 4, 20, 0, 13, 0, 0, 3, 13, 0, 0, 4, 6, 4, 7, 2)

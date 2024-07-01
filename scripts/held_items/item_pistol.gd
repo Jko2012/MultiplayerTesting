@@ -1,7 +1,8 @@
 extends HeldItem
 
 @export var projectile: PackedScene
-
+@export var color1: Color = Color.RED
+@export var color2: Color = Color.BLUE
 #@onready var ammo_capacity = 10
 #@onready var ammo_left = 10
 #@onready var ammo_held = 20
@@ -15,17 +16,23 @@ func _unhandled_input(_event):
 		if Input.is_action_just_pressed("primary"):# and can_do_primary
 			can_do_primary = false
 			play_shoot_effects.rpc()
-			var p = projectile.instantiate() as CharacterBody3D
-			world.add_child(p)
-			p.speed += owner.velocity.length()
-			p.global_position = projectile_spawnpoint.global_position
-			p.global_rotation = global_rotation
-			#p.rotate_x(deg_to_rad(rng.randf_range(-rotation_variance, rotation_variance)))
-			#p.rotate_y(deg_to_rad(rng.randf_range(-rotation_variance, rotation_variance)))
-			p.set_start_velocity()
+			spawn_projectile(color1)
 			if raycast.is_colliding():
 				var hit_player = raycast.get_collider()
 				hit_player.receive_damage.rpc_id(hit_player.get_multiplayer_authority())
+		if Input.is_action_just_pressed("secondary"):
+			spawn_projectile(color2)
+
+func spawn_projectile(color: Color):
+	var p = projectile.instantiate() as CharacterBody3D
+	world.add_child(p)
+	p.speed += owner.velocity.length()
+	p.global_position = projectile_spawnpoint.global_position
+	p.global_rotation = global_rotation
+	p.set_color(color)
+	p.color = color
+	p.set_start_velocity()
+	pass
 
 
 @rpc("any_peer", "call_local")

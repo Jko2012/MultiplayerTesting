@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b1742tyrlyt5s"]
+[gd_scene load_steps=13 format=3 uid="uid://b1742tyrlyt5s"]
 
 [ext_resource type="Shader" uid="uid://bafvf1eaplikv" path="res://scripts/shaders/paint_shader.tres" id="2_ynted"]
 [ext_resource type="Texture2D" uid="uid://xaa2grdypvbn" path="res://addons/kenney_prototype_textures/green/texture_02.png" id="3_k3017"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/surface_painting/DrawViewport.gd" id="5_sfb1c"]
 [ext_resource type="PackedScene" uid="uid://bgq3twv2jc8gl" path="res://scenes/floating_items/floating_item_pistol.tscn" id="7_7i35k"]
 [ext_resource type="Texture2D" uid="uid://mddi1hal5708" path="res://assets/pictures/brush_texture_lighter.png" id="7_t6ka7"]
+[ext_resource type="PackedScene" uid="uid://cy8c6tk01sgdh" path="res://scenes/paint_block.tscn" id="8_2yqph"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ia83d"]
 size = Vector3(100, 1, 100)
@@ -43,6 +44,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_yu0cp")
 script = ExtResource("4_mqpcm")
 
 [node name="DrawViewport" type="SubViewport" parent="."]
+disable_3d = true
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(10240, 10240)
@@ -53,3 +55,6 @@ script = ExtResource("5_sfb1c")
 [node name="Brush" type="Node2D" parent="DrawViewport"]
 script = ExtResource("5_1qe5k")
 texture = ExtResource("7_t6ka7")
+
+[node name="PaintBlock" parent="." instance=ExtResource("8_2yqph")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.13485, 1.03905, 0.898002)
